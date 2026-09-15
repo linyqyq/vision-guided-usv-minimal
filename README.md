@@ -1,89 +1,128 @@
 # Vision-Based USV Navigation — Minimal Demo
 
-A small Unity demonstration of the **camera observation → navigation decision → vessel motion → feedback** loop for an unmanned surface vessel (USV).
+A lightweight Unity demo of the **camera observation → navigation decision → vessel motion → feedback** loop for autonomous USV navigation.
 
-**Pre-publication release:** this repository reproduces a simplified navigation loop. It does not reproduce the paper's training procedure, learned behavior, or quantitative results. The included controller is a hand-written baseline that uses RGB pixels and auxiliary navigation state.
+> **Pre-publication release.** This repository provides a simplified public subset of the research framework. It does not include the original training pipeline, trained policies, tuned configurations, or quantitative research results.
+
+---
 
 ## Research Overview
 
-This project investigates vision-assisted multi-USV navigation in simulated maritime environments. The framework combines onboard visual observations with auxiliary navigation states and learns continuous control policies through Unity ML-Agents.
+The full research project studies **vision-assisted multi-USV navigation** in simulated port environments, combining onboard visual observations, navigation states, and reinforcement-learning-based continuous control.
 
-The research progresses from reinforcement-learning-based navigation toward perception-aware autonomous agents, incorporating visual scene understanding, dynamic vessel interactions, and goal-directed control in complex port environments.
+The research progresses from state-based navigation toward **perception-aware autonomous agents**, incorporating visual scene understanding, dynamic vessel interactions, maritime markers, and goal-directed control.
 
-The reward design considers goal progress, buoy-side navigation, and vessel encounters. These rule-inspired rewards encourage rule-consistent behavior, but do not constitute a formal guarantee of maritime-rule compliance.
-
-This repository provides a lightweight public subset of the full research framework, including demonstration code, procedural environments, an overview of the perception-policy-control architecture, and representative two-USV navigation demos.
-
+This repository includes a lightweight public code demo together with the overall research architecture and representative multi-USV navigation videos.
 
 ### Overall Architecture
 
-The figure below illustrates the overall perception-policy-control pipeline. Visual observations from onboard cameras are combined with auxiliary navigation and environmental information and processed by the learned policy to generate continuous control actions.
+The framework combines onboard visual observations and auxiliary navigation information with a learned policy to generate continuous vessel-control actions.
 
-<img width="769" height="771" alt="Vision-Guided PPO Framework" src="https://github.com/user-attachments/assets/53e4ac97-de7a-4bb6-9190-4f877933b888" />
+<p align="center">
+  <img
+    src="https://github.com/user-attachments/assets/53e4ac97-de7a-4bb6-9190-4f877933b888"
+    width="600"
+    alt="Vision-Guided PPO Framework"
+  />
+</p>
 
+---
 
-### Demo Videos
+## Demo Videos
 
-The following demos show successful two-USV navigation trajectories under different encounter configurations.
+The following videos show successful **two-USV navigation** under different initial and encounter conditions.
 
-- **Blue vessels:** controlled USVs.
-- **White vessels:** dynamic ASVs interacting with the controlled agents.
-- **Blue spheres:** individual navigation targets for the two USVs.
-- **Large left panel:** global view of the simulated port environment.
-- **Two right-side panels:** onboard first-person views from the two controlled USVs.
+- **Blue vessels:** controlled USVs
+- **White vessels:** dynamic ASVs
+- **Blue spheres:** individual navigation targets
+- **Left panel:** global environment view
+- **Right panels:** onboard views from the two controlled USVs
 
-In each scenario, the two controlled USVs approach from opposite directions toward their respective targets while interacting with dynamic vessels and navigating through maritime markers. The three demos illustrate successful trajectories under different initial and encounter conditions.
+In each case, the two USVs approach from opposite directions toward their respective targets while interacting with surrounding vessels and maritime markers.
 
-#### Demo 1 — Two-USV Navigation Case I
+<details>
+<summary><b>Demo 1 — Two-USV Navigation Case I</b></summary>
+
+<br>
 
 https://github.com/user-attachments/assets/b429d164-139b-4677-88aa-6e89281d41bf
 
-#### Demo 2 — Two-USV Navigation Case II
+</details>
+
+<details>
+<summary><b>Demo 2 — Two-USV Navigation Case II</b></summary>
+
+<br>
 
 https://github.com/user-attachments/assets/bf461df8-9db0-4a0e-bba5-7c7c08370b3c
 
-#### Demo 3 — Two-USV Navigation Case III
+</details>
+
+<details>
+<summary><b>Demo 3 — Two-USV Navigation Case III</b></summary>
+
+<br>
 
 https://github.com/user-attachments/assets/0e266f8e-63d1-4c6d-99f4-723e27ba487a
+
+</details>
+
+---
+
 ## Run
 
-1. Add this directory as a project in Unity Hub and open it with **Unity 2022.3.62f1**. This is a Built-in Render Pipeline demo.
-2. Select **USV Mini → Create demo scene** in the editor menu.
-3. Press **Play**. The scene is generated from primitives; no imported models are needed.
-4. Watch the overhead view and the onboard RGB image in the upper left. Use **Restart episode** to repeat the fixed initial condition.
+1. Open the project with **Unity 2022.3.62f1**.
+2. Select **USV Mini → Create demo scene**.
+3. Press **Play**.
+4. Use **Restart episode** to repeat the fixed initial condition.
 
-No Python environment, ML-Agents installation or model weights are required. A normal graphics-capable Unity session is needed for image rendering.
+No Python environment, ML-Agents installation, or model weights are required.
+
+---
+
+## Public Demo
+
+| Component | Implementation |
+| --- | --- |
+| Environment | Single USV, buoy corridor, and navigation goal |
+| Visual input | 84 × 84 onboard RGB camera |
+| Auxiliary state | Goal direction, distance, and forward speed |
+| Control | Continuous yaw and throttle |
+| Motion | Simplified planar vessel dynamics |
+| Feedback | Goal progress, step cost, and terminal outcome |
+
+The included controller is a **hand-written visual baseline**, not a trained policy. It uses image-based buoy cues together with auxiliary goal information to demonstrate the observation–action interface.
+
+The public environment and vessel dynamics are intentionally simplified and should not be interpreted as the full research configuration.
+
+---
 
 ## Validation
 
-Checked with Unity 2022.3.62f1 on Linux: script compilation and scene creation passed. A graphics-enabled Play Mode smoke run captured the onboard RGB image and reached the goal in **152 decisions** from the fixed starting condition. This checks the demo's basic operation, not research performance or robustness across scenarios.
+Tested with **Unity 2022.3.62f1 on Linux**.
 
-## What is reproduced?
+The demo successfully compiles, generates the scene, captures onboard RGB observations, and completes the fixed navigation task. This verifies the basic software loop only; it is **not a research-performance or robustness evaluation**.
 
-| Component | Public demo |
-| --- | --- |
-| Environment | One vessel, three red/green buoy pairs and a goal |
-| Visual observation | Actual Unity camera image, 84 × 84 RGB |
-| Auxiliary observation | Goal in the vessel frame, goal distance and forward speed |
-| Decision | Pixel color centroids combined with goal heading |
-| Action | Continuous yaw and throttle, each in `[-1, 1]` |
-| Motion | Simple planar kinematics at a 0.1-second decision interval |
-| Feedback | Distance progress, step cost and terminal outcome |
-| Termination | Goal, buoy proximity, boundary exit or 600-step timeout |
-
-The baseline extracts red/green pixel centroids and steers toward their image midpoint while tracking the goal. It falls back to goal heading when both colors are not visible. It receives no buoy world coordinates. The environment uses those coordinates for the simplified collision check. Goal information is supplied directly as auxiliary state; this is not camera-only navigation or a learned perception system.
-
-Yaw is mapped to ±45 degrees/second. Throttle is mapped to 0–3 metres/second. These are illustrative demo parameters. Vessel shape, dynamics, collision radius, reward and layout are simplified and are not research settings.
+---
 
 ## Code
 
-- [`MinimalUSVDemo.cs`](Assets/Scripts/MinimalUSVDemo.cs): procedural environment, camera capture, `Observe()`, baseline, `Step(action)` and episode feedback.
-- [`CreateMinimalScene.cs`](Assets/Editor/CreateMinimalScene.cs): editor command to generate the scene.
+- [`MinimalUSVDemo.cs`](Assets/Scripts/MinimalUSVDemo.cs)  
+  Environment generation, camera observations, baseline control, vessel motion, and episode feedback.
 
-`Observe()` returns four auxiliary values and refreshes the RGB texture. `Baseline()` demonstrates how those observations can produce an action. `Step()` advances the environment and records feedback. These methods illustrate the boundary where a learned policy could be connected; this release does not provide a training adapter.
+- [`CreateMinimalScene.cs`](Assets/Editor/CreateMinimalScene.cs)  
+  Unity editor command for generating the demonstration scene.
 
-## Scope of this release
+---
 
-The public subset excludes full reward formulas and tuned training configurations, multi-vessel coordination/reset logic, research harbor scenes, ocean/boat asset packages, trained checkpoints, experiment logs and evaluation results. It also excludes the original repository history.
+## Scope
 
-The demonstration score is only feedback for this toy environment. It is not a reported paper metric. Successful navigation in this fixed buoy corridor is not evidence of general obstacle avoidance, multi-vessel capability or maritime-rule compliance.
+The public release excludes:
+
+- trained checkpoints and original training code
+- tuned reward functions and training configurations
+- full multi-USV coordination logic
+- research-scale harbor environments and asset packages
+- experiment logs and quantitative evaluation results
+
+The included demo is intended to illustrate the **software interface and navigation loop**, not to reproduce the full research system or establish maritime-rule compliance.
