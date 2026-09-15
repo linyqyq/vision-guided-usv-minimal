@@ -21,7 +21,7 @@ The framework combines onboard visual observations and auxiliary navigation info
 <p align="center">
   <img
     src="https://github.com/user-attachments/assets/53e4ac97-de7a-4bb6-9190-4f877933b888"
-    width="600"
+    width="520"
     alt="Vision-Guided PPO Framework"
   />
 </p>
