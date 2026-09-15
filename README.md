@@ -4,24 +4,47 @@ A small Unity demonstration of the **camera observation → navigation decision 
 
 **Pre-publication release:** this repository reproduces a simplified navigation loop. It does not reproduce the paper's training procedure, learned behavior, or quantitative results. The included controller is a hand-written baseline that uses RGB pixels and auxiliary navigation state.
 
-## Research overview
+## Research Overview
 
-The full research project explores vision-assisted multi-USV navigation in simulated maritime environments. It combines onboard camera observations with auxiliary navigation/environment state, uses continuous control through Unity ML-Agents, and includes reward terms for goal progress, buoy-side navigation and vessel encounters. The inspected complex-scene configuration uses PPO and a visual encoder. Rule-inspired rewards alone do not establish navigation-rule compliance.
+This project investigates vision-assisted multi-USV navigation in simulated maritime environments. The framework combines onboard visual observations with auxiliary navigation states and learns continuous control policies through Unity ML-Agents.
 
-This public subset demonstrates the interface and basic environment loop; it contains newly written demonstration code and procedural geometry.
+The research progresses from reinforcement-learning-based navigation toward perception-aware autonomous agents, incorporating visual scene understanding, dynamic vessel interactions, and goal-directed control in complex port environments.
 
-```mermaid
-flowchart LR
-    E[Unity environment] --> C[Onboard RGB camera]
-    E --> S[Auxiliary navigation state]
-    C --> P[Public baseline controller]
-    S --> P
-    P --> A[Yaw and throttle]
-    A --> K[Planar vessel motion]
-    K --> E
-    E --> F[Progress and episode outcome]
-```
+The reward design considers goal progress, buoy-side navigation, and vessel encounters. These rule-inspired rewards encourage rule-consistent behavior, but do not constitute a formal guarantee of maritime-rule compliance.
 
+This repository provides a lightweight public subset of the full research framework, including demonstration code, procedural environments, an overview of the perception-policy-control architecture, and representative two-USV navigation demos.
+
+
+### Overall Architecture
+
+The figure below illustrates the overall perception-policy-control pipeline. Visual observations from onboard cameras are combined with auxiliary navigation and environmental information and processed by the learned policy to generate continuous control actions.
+
+<img width="769" height="771" alt="Vision-Guided PPO Framework" src="https://github.com/user-attachments/assets/53e4ac97-de7a-4bb6-9190-4f877933b888" />
+
+
+### Demo Videos
+
+The following demos show successful two-USV navigation trajectories under different encounter configurations.
+
+- **Blue vessels:** controlled USVs.
+- **White vessels:** dynamic ASVs interacting with the controlled agents.
+- **Blue spheres:** individual navigation targets for the two USVs.
+- **Large left panel:** global view of the simulated port environment.
+- **Two right-side panels:** onboard first-person views from the two controlled USVs.
+
+In each scenario, the two controlled USVs approach from opposite directions toward their respective targets while interacting with dynamic vessels and navigating through maritime markers. The three demos illustrate successful trajectories under different initial and encounter conditions.
+
+#### Demo 1 — Two-USV Navigation Case I
+
+https://github.com/user-attachments/assets/b429d164-139b-4677-88aa-6e89281d41bf
+
+#### Demo 2 — Two-USV Navigation Case II
+
+https://github.com/user-attachments/assets/bf461df8-9db0-4a0e-bba5-7c7c08370b3c
+
+#### Demo 3 — Two-USV Navigation Case III
+
+https://github.com/user-attachments/assets/0e266f8e-63d1-4c6d-99f4-723e27ba487a
 ## Run
 
 1. Add this directory as a project in Unity Hub and open it with **Unity 2022.3.62f1**. This is a Built-in Render Pipeline demo.
